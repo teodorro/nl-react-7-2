@@ -1,9 +1,10 @@
 import { useState } from "react";
 import "./App.css";
 import "./css/index.css";
+import PropTypes from 'prop-types';
 
 function App() {
-  const [list, setList] = useState([
+  const [list] = useState([
     {
       type: "video",
       url: "https://www.youtube.com/embed/rN6nlNC9WQA?rel=0&amp;controls=0&amp;showinfo=0",
@@ -83,33 +84,39 @@ function Video(props) {
 }
 
 function List(props) {
+  let i = 0;
   return props.list.map((item) => {
+    i++;
     if (item.views > 1000) {
       if (item.type === "video") {
         const prop = {
-          children: (<Video {...item} />)
+          children: (<Video {...item} />),
+          key: i,
         }
-        return <Popular {...prop} />;
+        return <Popular {...prop} key={prop.key}/>;
       }
       if (item.type === "article") {
         const prop = {
-          children: (<Article {...item} />)
+          children: (<Article {...item} />),
+          key: i,
         }
-        return <Popular {...prop} />;
+        return <Popular {...prop} key={prop.key}/>;
       }
     }
     if (item.views < 100) {
       if (item.type === "video") {
         const prop = {
-          children: (<Video {...item} />)
+          children: (<Video {...item} />),
+          key: i,
         }
-        return <New {...prop} />;
+        return <New {...prop} key={prop.key}/>;
       }
       if (item.type === "article") {
         const prop = {
-          children: (<Article {...item} />)
+          children: (<Article {...item} />),
+          key: i,
         }
-        return <New {...prop} />;
+        return <New {...prop} key={prop.key}/>;
       }
     }
     switch (item.type) {
@@ -121,6 +128,21 @@ function List(props) {
     }
     return null;
   });
+}
+
+New.propTypes = {
+  children: PropTypes.function,
+}
+Popular.propTypes = {
+  children: PropTypes.function,
+}
+Article.propTypes = {
+  title: PropTypes.string,
+  views: PropTypes.number,
+}
+Video.propTypes = {
+  url: PropTypes.string,
+  views: PropTypes.number,
 }
 
 export default App;
